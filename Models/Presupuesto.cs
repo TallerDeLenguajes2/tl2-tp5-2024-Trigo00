@@ -6,8 +6,12 @@ public class Presupuesto
     private string nombreDestinatario;
     private List<PresupuesoDetalle> detalle;
 
-    public Presupuesto()
+    public Presupuesto(){}
+    public Presupuesto(int id, string destinatario)
     {
+        IdPresupuesto = id;
+        NombreDestinatario = destinatario;
+        Detalle = new List<PresupuesoDetalle>();
     }
 
     public int IdPresupuesto { get => idPresupuesto; set => idPresupuesto = value; }

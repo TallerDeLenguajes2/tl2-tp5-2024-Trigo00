@@ -47,14 +47,14 @@ public class ProductoRepository
 
     public List<Producto> ListarProductos()
     {
-        var query = "SELECT * FROM Productos";
+        var query = "SELECT * FROM Producto";
         List<Producto> productos = new List<Producto>();
         using (SqliteConnection connection = new SqliteConnection(cadenaConnection))
         {
             SqliteCommand command = new SqliteCommand(query, connection);
             connection.Open();
 
-            using(SqliteDataReader reader = command.ExecuteReader())
+            using(var reader = command.ExecuteReader())
             {
                 while (reader.Read())
                 {
@@ -69,5 +69,46 @@ public class ProductoRepository
         }
         return productos;
     }
+
+    public Producto ObtenerProducto(int id)
+    {
+        var query = "SELECT * FROM Producto WHERE idProducto = @id";
+        Producto producto = null; //Lo inicializo en null para manejar los casos donde no lo encuentra
+
+        using(SqliteConnection connection = new SqliteConnection(cadenaConnection))
+        {
+            SqliteCommand command = new SqliteCommand(query, connection);
+            command.Parameters.Add(new SqliteParameter("@id", id));
+
+            connection.Open();
+            using(var reader = command.ExecuteReader())
+            {
+                if(reader.Read()) //Si encuentra un producto
+                {
+                    producto = new Producto(Convert.ToInt32(reader["idProducto"]), reader["Descripcion"].ToString(), Convert.ToInt32(reader["Precio"]));
+                }
+            }
+
+            connection.Close();
+        }
+        return producto; //Retorna null si no lo encontro o el producto encontrado.
+    }
+
+    public void EliminarProducto(int id)
+    {
+        var query = "DELETE FROM Producto WHERE idProducto = @id";
+        using(SqliteConnection connection = new SqliteConnection(cadenaConnection))
+        {
+            connection.Open();
+            SqliteCommand command = new SqliteCommand(query, connection);
+            command.Parameters.Add(new SqliteParameter("@id", id));
+
+            command.ExecuteNonQuery();
+            //No se si debo mostrar algun mensaje o algo dependiendo como resulte el executeNonQuery. Preguntar
+            connection.Close();
+        }
+    }
+
+    
 
 }
