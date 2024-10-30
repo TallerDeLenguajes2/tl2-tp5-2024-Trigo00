@@ -1,9 +1,9 @@
-public class PresupuesoDetalle
+public class PresupuestoDetalle
 {
     private Producto producto;
     private int cantidad;
 
-    public PresupuesoDetalle()
+    public PresupuestoDetalle()
     {
     }
 

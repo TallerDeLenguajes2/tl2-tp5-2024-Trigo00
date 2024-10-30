@@ -4,19 +4,21 @@ public class Presupuesto
 {
     private int idPresupuesto;
     private string nombreDestinatario;
-    private List<PresupuesoDetalle> detalle;
+    private DateTime fechaCreacion;
+    private List<PresupuestoDetalle> detalle;
 
     public Presupuesto(){}
     public Presupuesto(int id, string destinatario)
     {
         IdPresupuesto = id;
         NombreDestinatario = destinatario;
-        Detalle = new List<PresupuesoDetalle>();
+        Detalle = new List<PresupuestoDetalle>();
     }
 
     public int IdPresupuesto { get => idPresupuesto; set => idPresupuesto = value; }
     public string NombreDestinatario { get => nombreDestinatario; set => nombreDestinatario = value; }
-    public List<PresupuesoDetalle> Detalle { get => detalle; set => detalle = value; }
+    public List<PresupuestoDetalle> Detalle { get => detalle; set => detalle = value; }
+    public DateTime FechaCreacion { get => fechaCreacion; set => fechaCreacion = value; }
 
     public int  MontoPresupuesto()
     {

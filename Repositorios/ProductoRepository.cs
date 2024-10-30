@@ -7,7 +7,7 @@ public class ProductoRepository
 
     public void CrearProducto(Producto producto)
     {
-        var query = $"INSERT INTO Producto (idProducto, Descripcion, Precio) VALUES (@idProducto, @descripcion, @precio)";
+        var query = $"INSERT INTO Productos (idProducto, Descripcion, Precio) VALUES (@idProducto, @descripcion, @precio)";
         using (SqliteConnection connection = new SqliteConnection(cadenaConnection))
         {
             connection.Open();
@@ -26,7 +26,7 @@ public class ProductoRepository
 
     public void ModificarProducto(int id, Producto producto)
     {
-        var query = $"UPDATE Producto SET Descripcion = @descripcion, Precio = @precio WHERE idProducto = @idProducto";
+        var query = $"UPDATE Productos SET Descripcion = @descripcion, Precio = @precio WHERE idProducto = @idProducto";
         using (SqliteConnection connection = new SqliteConnection(cadenaConnection))
         {
             connection.Open();
@@ -47,12 +47,12 @@ public class ProductoRepository
 
     public List<Producto> ListarProductos()
     {
-        var query = "SELECT * FROM Producto";
+        var query = "SELECT * FROM Productos";
         List<Producto> productos = new List<Producto>();
         using (SqliteConnection connection = new SqliteConnection(cadenaConnection))
         {
-            SqliteCommand command = new SqliteCommand(query, connection);
             connection.Open();
+            SqliteCommand command = new SqliteCommand(query, connection);
 
             using(var reader = command.ExecuteReader())
             {
@@ -72,7 +72,7 @@ public class ProductoRepository
 
     public Producto ObtenerProducto(int id)
     {
-        var query = "SELECT * FROM Producto WHERE idProducto = @id";
+        var query = "SELECT * FROM Productos WHERE idProducto = @id";
         Producto producto = null; //Lo inicializo en null para manejar los casos donde no lo encuentra
 
         using(SqliteConnection connection = new SqliteConnection(cadenaConnection))
@@ -96,7 +96,7 @@ public class ProductoRepository
 
     public void EliminarProducto(int id)
     {
-        var query = "DELETE FROM Producto WHERE idProducto = @id";
+        var query = "DELETE FROM Productos WHERE idProducto = @id";
         using(SqliteConnection connection = new SqliteConnection(cadenaConnection))
         {
             connection.Open();
