@@ -106,6 +106,26 @@ public class PresupuestoRepository
         return detalles;
     }
 
+    // Método para agregar un producto y una cantidad a un presupuesto existente
+    public void AgregarProductoAPresupuesto(int idPresupuesto, int idProducto, int cantidad)
+    {
+        var query = "INSERT INTO PresupuestosDetalle (idPresupuesto, idProducto, Cantidad) VALUES (@idPresupuesto, @idProducto, @cantidad)";
+
+        using (SqliteConnection connection = new SqliteConnection(cadenaConnection))
+        {
+            connection.Open();
+
+            var command = new SqliteCommand(query, connection);
+            command.Parameters.Add(new SqliteParameter("@idPresupuesto", idPresupuesto));
+            command.Parameters.Add(new SqliteParameter("@idProducto", idProducto));
+            command.Parameters.Add(new SqliteParameter("@cantidad", cantidad));
+
+            command.ExecuteNonQuery();
+            connection.Close();
+        }
+    }
+
+
     // 4. Eliminar un Presupuesto por ID
     public void EliminarPresupuesto(int idPresupuesto)
     {

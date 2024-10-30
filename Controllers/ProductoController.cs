@@ -16,6 +16,7 @@ public class ProductoController : ControllerBase
     }
 
     [HttpPost]
+    [Route("CrearProducto")]
     public IActionResult CrearProducto([FromBody] Producto producto)
     {
         Producto pro = _productoRepository.ObtenerProducto(producto.IdProducto);
@@ -28,18 +29,18 @@ public class ProductoController : ControllerBase
     }
 
     [HttpGet]
+    [Route("ListaProductos")]
     public IActionResult ListarProductos()
     {
         var productos = _productoRepository.ListarProductos();
         return Ok(productos);
     }
 
-    [HttpPut]
-    [Route("/{i}")]
-    public IActionResult ModificarNombreProducto(int id, [FromBody] Producto producto)
+    [HttpPut("{id}")]
+    public IActionResult ModificarProducto(int id, [FromBody] Producto producto)
     {
         _productoRepository.ModificarProducto(id, producto);
-        return Ok(producto);
+        return NoContent();
     }
 
     
