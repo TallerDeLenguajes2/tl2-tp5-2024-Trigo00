@@ -98,7 +98,7 @@ class ProductosRepository
         {
             connection.Open();
             SqliteCommand command = new SqliteCommand(query,connection);
-            command.Parameters.AddWithValue("@id", id);
+            command.Parameters.AddWithValue("@Id", id);
             command.ExecuteNonQuery();
             connection.Close();            
         }
