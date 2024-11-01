@@ -1,43 +1,55 @@
 using Microsoft.AspNetCore.Mvc;
 
-namespace tl2_tp5_2024_Trigo00.Controllers;
+namespace MiWebApi.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class PresupuestoController : ControllerBase
+public class PresupuestosController : ControllerBase
 {
-    private readonly PresupuestoRepository _presupuestoRepository;
-    private readonly ProductoRepository _productoRepository;
 
-    private readonly ILogger<PresupuestoController> _logger;
+    private readonly ILogger<PresupuestosController> _logger;
 
-    public PresupuestoController(ILogger<PresupuestoController> logger)
+    private PresupuestosRepository repoPresupuestos;
+
+    public PresupuestosController(ILogger<PresupuestosController> logger)
     {
         _logger = logger;
+        repoPresupuestos = new PresupuestosRepository();
     }
-
-    [HttpPost]
-    public IActionResult CrearPresupuesto([FromBody] Presupuesto presupuesto)
+    [HttpPost("api/Presupuesto")]
+    public IActionResult CrearPresupuesto(Presupuesto presupuesto)
     {
-        _presupuestoRepository.CrearPresupuesto(presupuesto);
-        return Ok("Presupuesto creado correctamente");
+        if(!repoPresupuestos.CrearPresupuesto(presupuesto)) return BadRequest();
+        return Created();
     }
 
-    [HttpPost("{id}/ProductoDetalle")]
-    public IActionResult AgregarProductoDetalle(int idPresupuesto, [FromBody] PresupuestoDetalle pDetalle)
+    [HttpPost("api/Presupuesto/{id}/ProductoDetalle")]
+    public IActionResult AgregarProductoAlPresupuesto(int idPresupuesto, int idProducto, int cantidad)
     {
-        
-        _presupuestoRepository.AgregarProductoAPresupuesto(idPresupuesto, pDetalle.Producto.IdProducto, pDetalle
-        .Cantidad);
-        return NoContent();
-
+        if(!repoPresupuestos.AgregarProducto(idPresupuesto, idProducto, cantidad)) return BadRequest();
+        return Created();
     }
 
-    [HttpGet]
-    public IActionResult ListarPresupuestos()
+    [HttpGet("api/Presupuestos")]
+    public ActionResult<List<Presupuesto>> GetPresupuestos()
     {
-        var presupuestos = _presupuestoRepository.ListarPresupuestos();
-        return Ok(presupuestos);
+        return Ok(repoPresupuestos.ObtenerPresupuestos());
     }
+
+    [HttpGet("api/Presupuestos/{id}")]
+    public ActionResult<Presupuesto> GetPresupuestoPorId(int id)
+    {
+        return Ok(repoPresupuestos.ObtenerPresupuestoPorId(id));
+    }
+
+    [HttpDelete]
+
+    public IActionResult BorrarPresupuesto(int id)
+    {
+        repoPresupuestos.EliminarPresupuestoPorId(id);
+        return Ok();
+    }
+
+
 
 }

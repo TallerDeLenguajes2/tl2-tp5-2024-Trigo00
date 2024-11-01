@@ -1,49 +1,43 @@
 using Microsoft.AspNetCore.Mvc;
 
-namespace tl2_tp5_2024_Trigo00.Controllers;
+namespace MiWebApi.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class ProductoController : ControllerBase
+public class ProductosController : ControllerBase
 {
-    private readonly ProductoRepository _productoRepository;
 
-    private readonly ILogger<ProductoController> _logger;
+    private readonly ILogger<ProductosController> _logger;
 
-    public ProductoController(ILogger<ProductoController> logger)
+    private ProductosRepository repoProductos;
+
+    public ProductosController(ILogger<ProductosController> logger)
     {
         _logger = logger;
+        repoProductos = new ProductosRepository();
     }
 
-    [HttpPost]
-    [Route("CrearProducto")]
-    public IActionResult CrearProducto([FromBody] Producto producto)
+    [HttpPost("api/Producto")]
+    public IActionResult CrearProductos(Producto producto)
     {
-        Producto pro = _productoRepository.ObtenerProducto(producto.IdProducto);
-        if(pro != null)
-        {
-            return BadRequest("El producto ya se encuentra en la lista");
-        }
-        _productoRepository.CrearProducto(producto);
-        return Ok("Producto creado correctamente");
+        repoProductos.CrearProducto(producto);
+        return Created();
+
     }
 
-    [HttpGet]
-    [Route("ListaProductos")]
-    public IActionResult ListarProductos()
+    [HttpGet("api/Productos")]
+    public ActionResult<List<Producto>> GetProductos()
     {
-        var productos = _productoRepository.ListarProductos();
-        return Ok(productos);
+        return Ok(repoProductos.ObtenerProductos());
     }
 
-    [HttpPut("{id}")]
-    public IActionResult ModificarProducto(int id, [FromBody] Producto producto)
+
+    [HttpPut("api/Producto/{id}")]
+    public IActionResult ModificarProductos(int id, Producto producto)
     {
-        _productoRepository.ModificarProducto(id, producto);
-        return NoContent();
+        repoProductos.ModificarProducto(id, producto);
+        return Ok();
+
     }
 
-    
-
-    
 }
